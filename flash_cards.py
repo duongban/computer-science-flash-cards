@@ -7,6 +7,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 nameDB='cards.db'
 pathDB='db'
+cacheKnownCards=None
+indexCard=0
 
 def load_config():
     app.config.update(dict(
@@ -467,6 +469,50 @@ def mark_unknown(card_id, card_type):
     db.commit()
     flash('Card marked as unknown.')
     return redirect(url_for('memorize_known', card_type=card_type))
+
+@app.route('/memorize_known_sequence')
+@app.route('/memorize_known_sequence/<card_type>')
+@app.route('/memorize_known_sequence/<card_type>/<next_seq>')
+def memorize_known_sequence(card_type, next_seq=None):
+    global cacheKnownCards, indexCard
+    if(next_seq is None):
+        cacheKnownCards = get_all_card_already_known(card_type)
+        indexCard = 0
+        tag = getTag(card_type)
+        if tag is None:
+            return redirect(url_for('cards'))
+        if not cacheKnownCards:
+            flash("You haven't learned any '" + tag[1] + "' cards yet.")
+            return redirect(url_for('show'))
+    else:
+        indexCard = indexCard + 1
+        if(len(cacheKnownCards) == indexCard):
+            flash("Reach end list, reset index")
+            indexCard = 0
+
+    card = cacheKnownCards[indexCard]
+    short_answer = (len(card['back']) < 75)
+    tags = getAllTag()
+    card_type = int(card_type)
+    return render_template('memorize_known_sequence.html',
+                           card=card,
+                           card_type=card_type,
+                           short_answer=short_answer, tags=tags)
+
+def get_all_card_already_known(type):
+    db = get_db()
+
+    query = '''
+      SELECT
+        id, type, front, back, known
+      FROM cards
+      WHERE
+        type = ?
+        and known = 1
+    '''
+
+    cur = db.execute(query, [type])
+    return cur.fetchall()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
