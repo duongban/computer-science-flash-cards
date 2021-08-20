@@ -1,0 +1,15 @@
+.cardContent h4 { 
+    font-size: 40px;
+}
+  
+.cardContent code { 
+    font-size: 40px;
+}
+  
+.cardFront h3{ 
+    font-size: 50px;
+}
+
+.cardBack code {
+    font-size: 40px;
+}
