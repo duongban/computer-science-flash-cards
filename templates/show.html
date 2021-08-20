@@ -2,7 +2,9 @@
 {% block body %}
 
 <div class="page-header">
-    <h2>{{ cards|length }} Card{{ '' if (cards|length == 1) else 's' }}</h2>
+    <h2>{{ cards|length }} Card{{ '' if (cards|length <= 1) else 's' }}</h2>
+    <h2>{{ cards_known|length }} Known{{ '' if (cards_known|length <= 1) else 's' }}</h2>
+    <h2>{{ cards_unknown|length }} Unknown{{ '' if (cards_unknown|length <= 1) else 's' }}</h2>
 </div>
 <div class="btn-group btn-group-md" role="group" aria-label="filters">
     <a href="{{ url_for('filter_cards', filter_name="all") }}" class="btn btn-{{ "primary" if filter_name == "all" else "default" }}">all</a>
