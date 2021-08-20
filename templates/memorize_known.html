@@ -71,11 +71,14 @@
             <br />
             <br />
             <br />
-            <a href="{{ url_for('bookmark', card_type=3, card_id=card.id) }}" class="btn btn-default btn-sm">
+            <a href="{{ url_for('bookmark_memorize_known', card_type=3, card_id=card.id, old_card_type=card_type) }}" class="btn btn-default btn-sm">
                 <i class="fa fa-bookmark"></i>
                 bookmark this card (#{{ card.id }})
             </a>
-
+            <a href="{{ url_for('edit', card_id=card.id) }}" class="btn btn-default btn-sm">
+                <i class="fa fa-pencil-square-o"></i>
+                edit this card (#{{ card.id }})
+            </a>
         </div>
     </div>
 
