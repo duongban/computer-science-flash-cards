@@ -20,7 +20,7 @@ def load_config():
     ))
     app.config.from_envvar('CARDS_SETTINGS', silent=True)
 
-if __name__ == "__main__" or __name__ == "flash_cards":
+if __name__ == "__main__":
     load_config()
 
 
